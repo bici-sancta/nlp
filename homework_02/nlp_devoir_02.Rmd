@@ -23,9 +23,10 @@ For this project we are requested to :
 ***  
 ## 0 - Collect texts to create corpus   
 
-We were recommended to used the texts from Url link: http://www.gutenberg.org/wiki/Children%27s_Instructional_Books_(Bookshelf)
+We were recommended to used the texts from url link: http://www.gutenberg.org/wiki/Children%27s_Instructional_Books_(Bookshelf)
 
 The Bookshelf contains the following categories:
+
 - Misc.
 - Graded Readers
 - Poetry Readers
@@ -37,28 +38,28 @@ The Bookshelf contains the following categories:
 - Geography
 - Uncategorized
 
-In all, there are approx 104 titles identified at that collection of texts on the gutenberg.org website. To collect these texts to a local drive to faciliate the lexical processing, a python script was constructed that :  
-- parses the html from the parent site to extract 2 elements :  
-    - the hyperlink for each text  
-    - the title of each corresponding text  
-    
-- the hyperlink for each text actually refers to another web page within the gutenberg domain that includes links to each different format available for each text (html, pdf, txt, etc)  
-- there is a pattern evident from the 1st hyperlink that allows deconstruction and reconstruction of the url to correctly identify the url associated to the .txt version of the text  
-- that link construction is completed, and subsequently all of the texts are obtained using wget within the python script  
+In all, there are approx 104 titles identified at that collection of texts on the gutenberg.org website. To collect these texts to a local drive to facilitate the lexical processing, a python script is constructed that :
+
+- parses the html from the parent site to extract 2 elements :
+    - the hyperlink from the index page that points to a reference url for each text
+    - the title of each corresponding text
+- the hyperlink for each text actually refers to another web page within the gutenberg domain that includes links to each different format available for each text (html, pdf, txt, etc)
+- there is a pattern evident from the 1st hyperlink that allows deconstruction and reconstruction of the url to correctly identify the url associated to the .txt version of the text
+- that link construction is completed, and subsequently all of the texts are obtained using wget within the python script
 
 The python code that identifies and downloads the 100+ texts from the Children's Bookshelf is included in Appendix A.  
 
-Subsequent to the download, an additional script was executed that removes the Gutenberg licensing texts from the beginning and ending portions of the text. Since the goal of this assignment is to assess the lexical diversity of each text by several measures, including word length, it is relevant to remove the Gutenberg license from the texts to eliminate that specific vocabulary from contributing to the diversity metrics. The python code that removes the licensing text is in Appendix B.
+Subsequent to the download, an additional script is executed that removes the Gutenberg licensing texts from the beginning and ending portions of the text. Since the goal of this assignment is to assess the lexical diversity of each text by several measures, including word length, it is relevant to remove the Gutenberg license from the texts to eliminate that specific vocabulary from contributing to the diversity metrics. The python code that removes the licensing text is in Appendix B.
 
 ## 1 - Vocabulary Size   
 
 To establish a vocabulary size score for each text the following is completed :  
 
-- each of the 100+ texts were read into memory to establish the corpus
-- some basic cleaning of the to retain only aplhabetic characters was completed
+- each of the 100+ texts is read into memory to establish the corpus
+- some basic cleaning of the text to retain only alphabetic characters is completed
 - all remaining words were converted to lower case letters
 - the resulting number of unique vocabulary words were counted for each of the texts independently
-- the maximum vocabulary size was found in the text :
+- the maximum vocabulary size is found in the text :
     * _McGuffey's Sixth Eclectic Reader_ with 14,611 unique words
 - the vocabulary size for each text is then divided by the maximum vocabulary size (14,611) to produce the normalized vocabulary score for each text  
 
@@ -74,15 +75,18 @@ The python code to establish the normalized vocabulary scores is included in App
 
 A similar approach to the normalized vocabulary method is used to establish a text score based on longest word length.  
 
-* each of the 100+ texts were read into memory to establish the corpus
-* some basic cleaning of the to retain only aplhabetic characters was completed
+* each of the 100+ texts is read into memory to establish the corpus
+* some basic cleaning of the text to retain only alphabetic characters is completed
 * all remaining words were converted to lower case letters
-* the resulting text was searched for all words with greater than seven characters
-* this subset of words was sorted in descending order by word length
+* the resulting text is searched for all words with greater than seven characters
+* this subset of words is sorted in descending order by word length
 * the longest word in each text is identified, along with an integer count of the number of characters in that word
-* the longest word identified among all of the texts is :
+* the longest word identified among all of the texts surveyed is :
     - in the text _In Dutch_ with the word _gehoorzaamheidsinstinct_ which has 23 characters
-* we observe that (a) this is not an English word, but also that (b) several of the texts with longer words are in non-English language texts (French, Spanish, and Latin are also among the higher word length texts). Since the English language texts are intermingled with the non-English language texts with the 4th through 10th place word lengths, with 19 and 18 characters, we do not make adjustment for the Dutch word as being the longest word. In addition, Google Translate® indicates that this is likely 2 words : _gehoorzaamheids_ and _instinct_, but recognizing the German/Dutch language characteristic to concatenate words together to form new words, we choose to leave the word as it is, and use that as the reference longest word for the current corpus.
+* we observe that
+    (a) this is not an English word, and also that
+    (b) Google Translate® indicates that this is likely 2 words : _gehoorzaamheids_ and _instinct_, but recognizing the German/Dutch language characteristic to concatenate words together to form new words, we choose to leave the word as it is, and 
+    (c) additionally, several of the texts with longer words are in non-English language texts (French, Spanish, and Latin are also among the higher word length texts). Since the English language texts are intermingled with the non-English language texts for the top 10 word lengths, (with 19 and 18 characters for the longest English words), we do not make adjustment; we retain the Dutch word as the longest word for our measurement purposes and use that as the reference longest word for the current corpus
 * the maximum word length for each text is then divided by the overall maximum word length (23) to produce the normalized longest word score for each text  
 
 The range and distribution of the scores for the collection of texts is shown in below Figure 2.  
@@ -96,11 +100,16 @@ The python code to establish the normalized vocabulary scores is included in App
 ## 3 - Text Difficulty Score  
 
 
-To provide an Text Difficulty Score (__TDS__) metric we introduce a metric based on the normalized lexical diversity score, vocabulary size, and max word length. We normalized all of the lexical diversity to 1, with this set of 100+ lexical diversity scores available from the same corpus as in sections 1 and 2 above. Then for a new metric, we use two different variants of combined normalized scores : simple addition of the three, and simple multiplication of the three. Between these 2 candidate TDS values, we choose the multiplication version, due to slight improvement in order ranking of the lower level grade readers within the McGuffey Readers set.  
+To provide a Text Difficulty Score (__TDS__) metric we introduce a metric based on the normalized values of lexical diversity, vocabulary size, and max word length. The lexical diversity were normalized 1 with this set of 100+ lexical diversity scores available from the same corpus as in sections 1 and 2 above. Then for a new metric, we use two different variants of combined normalized scores :
 
-For the eight selected texts for this evaluation, the normalized values for each measure along with the sum TDS and multiplication TDS are shown in below Table 1. The table rows are sorted in descending order based on value of the multiply TDS.  
+- simple addition of the three, and
+- simple multiplication of the three.
 
-We can observe that there is, by this method, a monotically decreasing trend in TDS associated to decreasing grade level among the McGuffey readers. Thus, this TDS score meets expectations at that level and is an improvement over base lexical diversity score used in prior evaluation. Further, the New National First Reader is ranked lowest in TDS - again meeting expectations, since we observed previously that this reader has the smallest vocabulary among the texts and is also an early grade reader. The Literary World Seventh Reader and the Ontario High School Reader fall between the McGuffey 4th and 5th level readers - which is perhaps contrary to expectations, based on the titles of the readers. We would expect a high school reader to have higher complexity than a 5th or 6th level primer. This might be attributed to the eras in which these readers were compiled or an indication that there is further room for improvement in the TDS method. The metrics developed here do not, for instance, account for _stop words_ or _stemming_ prior to establishing the types within the corpus. These basic additional text preparation steps are likely to provide improvements in metrics to assess text difficulty.  
+For the eight selected texts for this evaluation, the normalized values for each measure along with the sum TDS and multiplication TDS are shown in below Table 1. The table rows are sorted in descending order based on value of the multiply TDS (__mlt_scores__).  
+
+Between these 2 candidate TDS values, we choose the multiplication version, due to slight improvement in order ranking of the lower level grade readers within the McGuffey Readers set.  
+
+We can observe that there is, by this method, a monotonically decreasing trend in TDS associated to decreasing grade level among the McGuffey readers. Thus, this TDS score meets expectations at that level and is an improvement over the base lexical diversity score used in prior evaluation. Further, the New National First Reader is ranked lowest in TDS - again meeting expectations, since we observed previously that this reader has the smallest vocabulary among the texts and is also an early grade reader. The Literary World Seventh Reader and the Ontario High School Reader fall between the McGuffey 4th and 5th level readers - which is perhaps contrary to expectations, based on the titles of the readers. We would expect a high school reader to have higher complexity than a 5th or 6th level primer. This might be attributed to the eras in which these readers were compiled or an indication that there is further room for improvement in the TDS method. The metrics developed here do not, for instance, account for _stop words_ or _stemming_ prior to establishing the types within the corpus. These basic additional text preparation steps are likely to provide improvements in metrics to assess text difficulty.  
 
 The TDS value is also plotted in the below figure for each of the texts, along with the other statistics. The values are plotted in descending order of the TDS score. The TDS score is the green bar which is the furthest to the right in each grouping.  
 
@@ -132,6 +141,7 @@ The python code to provide the normalized combined metrics is in Appendix E.
 ### References  
 
 [1] - http://www.nltk.org/book/ch01.html  
+[2] - http://www.gutenberg.org/wiki/Children%27s_Instructional_Books_(Bookshelf)  
 
 \newpage  
 
