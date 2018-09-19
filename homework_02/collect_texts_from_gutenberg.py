@@ -1,8 +1,4 @@
 
-# coding: utf-8
-
-# In[149]:
-
 #
 # ... file : collect_texts_from_gutenberg.py
 #
