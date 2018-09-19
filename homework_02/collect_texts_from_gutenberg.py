@@ -61,7 +61,9 @@ os.chdir(home_dir)
 # ... extract urls for targeted texts 
 # ...
 # ... if link is in this format : //www.gutenberg.org/ebooks/7841
-# ... then texts is at this corresponding url : http://www.gutenberg.org/cache/epub/14880/pg14880.txt
+# ...
+# ... then texts is at this corresponding url : http://www.gutenberg.org/cache/epub/7841/pg7841.txt
+# ... or at this url :                          http://www.gutenberg.org/files/7841-0.txt
 # ... -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 page = requests.get('http://www.gutenberg.org/wiki/Children%27s_Instructional_Books_(Bookshelf)')
