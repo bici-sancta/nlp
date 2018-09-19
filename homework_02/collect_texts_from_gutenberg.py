@@ -25,23 +25,8 @@ import pandas as pd
 import string
 import strip
 
-import nltk
-from nltk.corpus import PlaintextCorpusReader
-
 from lxml import html
 import requests
-
-# ... -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-# ... some plotting defaults
-# ... -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-get_ipython().magic('matplotlib inline')
-import matplotlib.pyplot as plt
-plt.style.use('seaborn-whitegrid')
-from matplotlib import rcParams
-rcParams.update({'figure.autolayout': True})
-plt.rc('xtick', labelsize=20)     
-plt.rc('ytick', labelsize=20)
 
 # ... -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # ... declare some directory locations
@@ -49,7 +34,6 @@ plt.rc('ytick', labelsize=20)
 
 home_dir = "/home/mcdevitt/_ds/_smu/_src/nlp/homework_02/"
 corpus_dir = "./text/"
-plot_dir = "./plots/"
 
 os.chdir(home_dir)
 
@@ -78,9 +62,8 @@ pg_num[0:5]
 
 # ... recombine to create full url
 
-text_link = ['http:' + lnk + '/pg' + pg + '.txt' for lnk,pg in zip(book_links, pg_num)]
+text_link = ['http:' + lnk + '/pg' + pg + '.txt' for lnk, pg in zip(book_links, pg_num)]
 text_link[0:5]
-
 len(text_link)
 
 # ... -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
