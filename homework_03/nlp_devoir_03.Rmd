@@ -222,6 +222,11 @@ for (w in stems)
 
 The python code to produce the above are included in Appendices A and B.  
 
+The markdown and supporting documents for this homework can also be found at :  
+https://github.com/bici-sancta/nlp/tree/master/homework_03  
+
+
+
 ***  
 
 
