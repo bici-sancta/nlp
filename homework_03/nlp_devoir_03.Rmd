@@ -1,0 +1,250 @@
+---
+title: "Text Preprocessing"
+output:
+  pdf_document: default
+  html_document: default
+subtitle: (do not ask for whom the bell tolls)
+classoption: portrait
+---
+
+### MSDS 7337 - Natural Language Processing - Homework 03  
+#### Patrick McDevitt  
+#### 28-Sep-2018  
+
+***  
+## PreProcessing : Edit distances, Stop words, and Stemming   
+
+For this project we are requested to :  
+
+1. Compare your given name with your nickname (if you don’t have a nickname, invent one for this assignment) by answering the following questions:
+    a. What is the edit distance between your nickname and your given name?
+    b. What is the percentage string match between your nickname and your given name ?  
+Show your work for both calculations.
+2. Find a friend (or family member or classmate) who you know has read a certain book. Without your friend knowing, copy the first two sentences of that book. Now rewrite the words from those sentences, excluding stop words. Now tell your friend to guess which book the words are from by reading them just that list of words. Did you friend correctly guess the book on the first try? What did he or she guess? Explain why you think you friend either was or was not able to guess the book from hearing the list of words. 
+3. Run one of the stemmers available in Python. Run the same two sentences from question 2 above through the stemmer and show the results. How many of the outputted stems are valid morphological roots of the corresponding words? Express this answer as a percentage.
+
+***  
+
+## 1 - Edit Distances 
+
+Given name : Patrick  
+Nickname : Pat
+
+a. What is the edit distance between your nickname and your given name ?  
+
+    | Action | letter | additional distance |
+    |--------|--------|---------------------|
+    |delete | r | (+1) |
+    |delete | i | (+1) |
+    |delete | c | (+1) |
+    |delete | k | (+1) |
+    |--------|--------|---------------------|
+    | edit distance | | 4 |
+
+b. What is the percentage string match between your nickname and your given name ?  
+
+    | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+    |---|---|---|---|---|---|---|
+    | P | a | t | r | i | c | k |
+    | P | a | t | - | - | - | - |
+    |---|---|---|---|---|---|---|
+    | 1 | 1 | 1 | 0 | 0 | 0 | 0 |
+    |---|---|---|---|---|---|---|
+    
+    Percentage match = 3 / 7 = `r round(3/7 * 100, 1)`%
+
+
+
+## 2 - Stop word elimination    
+
+#### __Find a friend who you know has read a certain book. Without your friend knowing, copy the first two sentences of that book. Now rewrite the words from those sentences, excluding stop words. Now tell your friend to guess which book the words are from by reading them just that list of words.__   
+
+***
+
+> "He lay flat on the brown, pine-needled floor of the forest, 
+> his chin on his folded arms, and high overhead the wind blew in the tops of the pine trees. 
+> The mountainside sloped gently where he lay; but below it was steep and he could see 
+> the dark of the oiled road winding through the pass."
+>
+> --- _For Whom the Bell Tolls_, Ernest Hemingway, 1940
+        
+***  
+
+After removing the stop words [using stop words as defined in NLTK package : stopwords.words('english')], the remaining tokens are :  
+
+```{r, echo = FALSE}
+library(reticulate)
+printf <- function(...) invisible(cat(sprintf(...)))
+
+source_python("remove_stopwords.py")
+
+two_sentences <- strwrap("He lay flat on the brown, pine-needled floor of the forest, 
+        his chin on his folded arms, and high overhead the wind blew in the tops of the pine trees. 
+        The mountainside sloped gently where he lay; but below it was steep and he could see 
+        the dark of the oiled road winding through the pass.", 1000, simplify = TRUE)
+
+two_sentences <- tolower(two_sentences)
+two_sentences <- gsub("(?!-)[[:punct:]]", "", two_sentences, perl=TRUE)
+
+filtered_sentence <- remove_stopwords(two_sentences)
+
+w_cnt <- 1
+for (w in filtered_sentence)
+{
+    if(!(w_cnt %% 5)) {printf("\n"); w_cnt <- 1}
+    
+    printf(" %15s |", w)
+    w_cnt <- w_cnt + 1
+}
+
+```
+
+#### __Did you friend correctly guess the book on the first try? What did he or she guess ?__   
+
+Well, the book from which these two entences came was not recognized. Forced to name a book title from which these words came, my collaborator stated : "_Last of the Mohicans_" by James Fenimore Cooper, which I consider to be not such a bad guess, considering the text content.
+
+#### __Explain why you think you friend either was or was not able to guess the book from hearing the list of words.__  
+
+Several contributors to why the book title was not guessed :
+
+1. there is no proper noun included to identify place or person
+4. the only verbs are "blew" (ostensibly associated to the wind) and "see" and "lay" which are potentially associated to a person ("chin" and "folded" "arms"), so there is no uniquely discernible action described that places this in a specific context.
+3. the literary quality and style of the writer is removed when the stop words are extracted. Even if the title of the book is not recalled, it might have been possible to recognize the stylistic way in which Hemingway initiates a novel with subtle yet tangible tension and drama even while describing an otherwise characteristically banal setting. That writing is achieved by the interaction among all the words - function and content words.
+2. this is not a book that my collaborator had read recently
+1. my collaborator is not as big a fan of Hemingway as am I ;-)>
+
+
+## 3 - Stemming  
+
+#### __Run one of the stemmers available in Python. Run the same two sentences from question 2 above through the stemmer and show the results.__   
+
+__Porter Stemmer__  
+
+```{r, echo = FALSE}
+library(reticulate)
+printf <- function(...) invisible(cat(sprintf(...)))
+
+source_python("get_stems.py")
+
+two_sentences <- strwrap("He lay flat on the brown, pine-needled floor of the forest, 
+        his chin on his folded arms, and high overhead the wind blew in the tops of the pine trees. 
+        The mountainside sloped gently where he lay; but below it was steep and he could see 
+        the dark of the oiled road winding through the pass.", 1000, simplify = TRUE)
+
+two_sentences <- tolower(two_sentences)
+two_sentences <- gsub("(?!-)[[:punct:]]", "", two_sentences, perl=TRUE)
+
+stems <- get_stems(two_sentences, 'porter')
+
+w_cnt <- 1
+for (w in stems)
+{
+    if(!(w_cnt %% 6)) {printf("\n"); w_cnt <- 1}
+    
+    printf(" %15s |", w)
+    w_cnt <- w_cnt + 1
+}
+
+```
+
+__Snowball Stemmer__  
+
+```{r, echo = FALSE}
+library(reticulate)
+printf <- function(...) invisible(cat(sprintf(...)))
+
+source_python("get_stems.py")
+
+two_sentences <- strwrap("He lay flat on the brown, pine-needled floor of the forest, 
+        his chin on his folded arms, and high overhead the wind blew in the tops of the pine trees. 
+        The mountainside sloped gently where he lay; but below it was steep and he could see 
+        the dark of the oiled road winding through the pass.", 1000, simplify = TRUE)
+
+two_sentences <- tolower(two_sentences)
+two_sentences <- gsub("(?!-)[[:punct:]]", "", two_sentences, perl=TRUE)
+
+stems <- get_stems(two_sentences, 'snowball')
+
+w_cnt <- 1
+for (w in stems)
+{
+    if(!(w_cnt %% 6)) {printf("\n"); w_cnt <- 1}
+    
+    printf(" %15s |", w)
+    w_cnt <- w_cnt + 1
+}
+
+```
+
+__Lemmatization__  
+
+```{r, echo = FALSE}
+library(reticulate)
+printf <- function(...) invisible(cat(sprintf(...)))
+
+source_python("get_stems.py")
+
+two_sentences <- strwrap("He lay flat on the brown, pine-needled floor of the forest, 
+        his chin on his folded arms, and high overhead the wind blew in the tops of the pine trees. 
+        The mountainside sloped gently where he lay; but below it was steep and he could see 
+        the dark of the oiled road winding through the pass.", 1000, simplify = TRUE)
+
+two_sentences <- tolower(two_sentences)
+two_sentences <- gsub("(?!-)[[:punct:]]", "", two_sentences, perl=TRUE)
+
+stems <- get_stems(two_sentences, 'lemmatize')
+
+w_cnt <- 1
+for (w in stems)
+{
+    if(!(w_cnt %% 6)) {printf("\n"); w_cnt <- 1}
+    
+    printf(" %15s |", w)
+    w_cnt <- w_cnt + 1
+}
+
+```
+
+
+#### __How many of the outputted stems are valid morphological roots of the corresponding words? Express this answer as a percentage.__  
+
+* __Porter Stem__
+    * 3 of 28 stems are not valid morphological roots : pine-needl, mountainsid, gentli
+    * --> `r round(25/28 * 100, 1)`% are valid morphological roots
+* __Snowball Stem__
+    * 3 of 28 stems are not valid morphological roots : pine-needl, mountainsid, gentl
+    * --> `r round(25/28 * 100, 1)`% are valid morphological roots
+* __Lemmatization__
+    * 1 of 28 lemmas are not valid morphological roots : pas
+    * --> `r round(27/28 * 100, 1)`% are valid morphological roots
+
+***  
+
+The python code to produce the above are included in Appendices A and B.  
+
+***  
+
+
+### References  
+
+[1] - http://www.nltk.org/book/  
+[2] - https://courses.cs.ut.ee/LTAT.01.001/2017_fall/uploads/Main/Lecture6.pdf
+
+\newpage  
+
+***  
+
+### Appendix A - Remove stop words python script   
+
+
+```{r code = readLines('remove_stopwords.py'), eval = FALSE}
+
+```
+
+### Appendix B - Stemming python script   
+
+
+```{r code = readLines('get_stems.py'), eval = FALSE}
+
+```
+
