@@ -1,0 +1,38 @@
+word,descr,penn_tag
+His,possessive pronoun,PRP$
+Republican,adjective,JJ
+opponent,noun,NN
+",",'-,NaN
+the,determiner,DT
+incumbent,noun,NN
+Bruce,proper noun,NNP
+Rauner,proper noun,NNP
+",",'-,NaN
+has,verb,VBZ
+made,verb,VBN
+much,adverb,RB
+of,preposition,IN
+the,determiner,DT
+toilet,adjective,JJ
+issue,noun,NN
+in,preposition,IN
+the,determiner,DT
+final,adjective,JJ
+months,"noun, plural",NNS
+of,preposition,IN
+the,determiner,DT
+gubernatorial,adjective,JJ
+campaign,noun,NN
+",",'-,NaN
+running,verb,VBG
+an,determiner,DT
+ad,noun,NN
+calling,verb,VBG
+Pritzker,proper noun,NNP
+the ,determiner,DT
+porcelain,adjective,JJ
+prince,noun,NN
+of,preposition,IN
+tax,adjective,JJ
+avoidance,noun,NN
+.,'-,.

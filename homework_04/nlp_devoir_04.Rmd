@@ -1,0 +1,100 @@
+---
+title: "Parts of Speech"
+output:
+  pdf_document: default
+  html_document: default
+subtitle: (la grammaire, qui sait régenter jusq'aux rois - Molière)
+classoption: portrait
+---
+
+### MSDS 7337 - Natural Language Processing - Homework 04  
+#### Patrick McDevitt  
+#### 28-Sep-2018  
+
+***  
+##    
+
+For this project we are requested to :  
+
+1. Run one of the part-of-speech (POS) taggers available in Python. 
+    a. Find the longest sentence you can, longer than 10 words, that the POS tagger tags correctly. Show the input and output.
+    b. Find the shortest sentence you can, shorter than 10 words, that the POS tagger fails to tag 100 percent correctly. Show the input and output. Explain your conjecture as to why the tagger might have been less than perfect with this sentence.
+
+2. Run a different POS tagger in Python. Process the same two sentences from question 1.
+    a. Does it produce the same or different output?
+    b. Explain any differences as best you can.
+
+3. In a news article from this week’s news, find a random sentence of at least 10 words.
+    a. Looking at the Penn tag set, manually POS tag the sentence yourself.
+    b. Now run the same sentences through both taggers that you implemented for questions 1 and 2. Did either of the taggers produce the same results as you had created manually?
+    c. Explain any differences between the two taggers and your manual tagging as much as you can.
+
+***  
+
+## 1 - Part of speech tagging  
+
+
+```{r, echo = FALSE}
+library(reticulate)
+printf <- function(...) invisible(cat(sprintf(...)))
+
+source_python("pos_tagger_fn.py")
+
+long_sentence <- strwrap("The power of numbers is never more evident than when we use them 
+                         to speculate on the time of our dying.", 1000, simplify = TRUE)
+
+#sentences <- tolower(two_sentences)
+#two_sentences <- gsub("(?!-)[[:punct:]]", "", two_sentences, perl=TRUE)
+
+pos_tagged_sentence <- pos_tagger(long_sentence, 'nltk')
+
+w_cnt <- 1
+for (w in pos_tagged_sentence)
+{
+    printf(" %15s |", w)
+    w_cnt <- w_cnt + 1
+}
+
+```
+
+
+
+
+## 2 - Stop word elimination    
+
+
+
+## 3 - Stemming  
+
+***  
+
+The python code to produce the above are included in Appendices A and B.  
+
+The markdown and supporting documents for this homework can also be found at :  
+https://github.com/bici-sancta/nlp/tree/master/homework_03  
+
+
+***  
+
+### References  
+
+[1] - http://www.nltk.org/book/  
+
+\newpage  
+
+***  
+
+### Appendix A - Remove stop words python script   
+
+
+```{r code = readLines(''), eval = FALSE}
+
+```
+
+### Appendix B - Stemming python script   
+
+
+```{r code = readLines(''), eval = FALSE}
+
+```
+
